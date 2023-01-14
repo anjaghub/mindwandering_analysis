@@ -13,7 +13,7 @@
   library(dplyr)
 
 # Loading the data and renaming the columns
-  mw_data <- read.csv("/Users/anja/Documents/mw_data.csv")
+  mw_data <- read.csv("/Users/anja/Documents/GitHub/mindwandering_analysis/mw_data.csv")
   colnames(mw_data) <- c("timestamp",
                          "id",
                          "sampling_method",
