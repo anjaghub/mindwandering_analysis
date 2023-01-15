@@ -72,3 +72,41 @@
     ggtitle("How aware were you about your environment?") +
     xlab("") 
     
+# Are social mind wanderings more difficult to leave? 
+# Create vector with IDs to run through loop
+  ids <- unique(mw_data[,"id"])
+  
+# Create empty list to store plots
+  plot_list = list()
+
+# Loop to create plot per person  
+  for(i in ids){
+    new_data <- mw_data[mw_data$id == i, ] 
+    sample_size = new_data %>% group_by(social) %>% summarize(num=n())
+    
+    p <- new_data %>% 
+      left_join(sample_size) %>%
+      mutate(myaxis = paste0(social, "\n", "n=", num)) %>%
+      ggplot( aes(x=myaxis, y=stepping_out, fill=social)) +
+      geom_violin(width=0.8) +
+      geom_boxplot(width=0.1, color="grey", alpha=0.2) +
+      scale_fill_viridis(discrete = TRUE) +
+      theme_ipsum() +
+      theme(
+        legend.position="none",
+        plot.title = element_text(size=11)
+      ) +
+      ggtitle("How easily could you have stepped out a social vs. a non social mind wandering?") +
+      xlab("") 
+    
+    plot_list[[i]] = p
+  }
+
+# Loop to store each visualization locally
+  for (i in ids) {
+    file_name = paste("social_plot_", i, ".tiff", sep="")
+    tiff(file_name)
+    print(plot_list[[i]])
+    dev.off()
+  }  
+  
